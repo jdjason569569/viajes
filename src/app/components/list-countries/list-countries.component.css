@@ -1,3 +1,9 @@
 .block-countries {
-    background: gainsboro
+    background: gainsboro;
+    height: fit-content;
+}
+
+.drop-list {
+    min-height: 300px;
+    width: 100%;
 }

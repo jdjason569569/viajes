@@ -18,8 +18,8 @@
         </div>
 
         <div class="row">
-            <div class="col-12">
-                <div class="row mt-2 mb-2" *ngFor="let country of listCountries">
+            <div (cdkDropListDropped)="drop($event)" cdkDropList drop-list class="col-12" #lCountries="cdkDropList" [cdkDropListData]="listCountries" [cdkDropListConnectedTo]="[lCountriesVisit]">
+                <div cdkDrag class="row mt-2 mb-2" *ngFor="let country of listCountries">
                     <div class="col-3">
                         <img [src]="country.flag" class="img-fluid">
                     </div>
@@ -38,7 +38,16 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-12"></div>
+            <div (cdkDropListDropped)="drop($event)" cdkDropList class="col-12 drop-list" #lCountriesVisit="cdkDropList" [cdkDropListData]="listCountriesToVisit" [cdkDropListConnectedTo]="[lCountries]">
+                <div cdkDrag class="row mt-2 mb-2" *ngFor="let country of listCountriesToVisit">
+                    <div class="col-3">
+                        <img [src]="country.flag" class="img-fluid">
+                    </div>
+                    <div class="col-9">
+                        <span>{{country.name}}</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

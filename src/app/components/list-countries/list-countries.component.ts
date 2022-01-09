@@ -3,6 +3,8 @@ import { forkJoin } from 'rxjs';
 import { CountryService } from 'src/app/services/country.service';
 import { Region } from '../../models/region';
 import { Country } from '../../models/country';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-list-countries',
@@ -13,8 +15,8 @@ export class ListCountriesComponent implements OnInit {
 
   load: boolean = false;
   listRegions?: Region[] =[];
-  listCountries?: Country[] =[];
-  listCountriesToVisit?: Country[] =[];
+  listCountries: Country[] =[];
+  listCountriesToVisit: Country[] =[];
   regionSelected? : string = 'EU'
 
 
@@ -34,11 +36,23 @@ export class ListCountriesComponent implements OnInit {
          this.load = false;
     });
   }
-  filterCountries(event: any){
-    this.countryService.getCountriesByRegion(event.value).subscribe(response=>{
-      this.listCountries = response;
-    });
 
+  filterCountries(event: any){
+    this.countryService.getCountriesByRegion(event.value).subscribe(listResponse=>{
+      this.listCountries = _.differenceBy(listResponse, this.listCountriesToVisit, c => c.name);
+    });
+  }
+
+  drop(event: CdkDragDrop<Country[]>) {
+    //moveItemInArray(this.listCountries, event.previousIndex, event.currentIndex);
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+                        event.container.data,
+                        event.previousIndex,
+                        event.currentIndex);
+    }
   }
 
 }
